@@ -32,7 +32,7 @@ class FriendsController {
   }
   async removeFriend(req, res) {
     try {
-      const data = (await FriendsService.removeFriend(req.user.id, req.body.friendId));
+      const data = (await FriendsService.removeFriend(req.user.id, req.query.friendId));
       try {
         res.status(200).json(data)
       }

@@ -36,6 +36,7 @@ class FriendsService {
         message: 'friendId of required.'
       });
     }
+    const friend = await User.findByPk(friendId);
     if(errors.length !== 0) throw errors;
 
     const friendship = await FriendShip.create({
@@ -43,7 +44,10 @@ class FriendsService {
       friendId
     });
 
-    return friendship;
+    return {
+      friendship: friendship,
+      friend: friend,
+    };
   }
 
   async addFriendByName(userId, name) {
@@ -115,6 +119,7 @@ class FriendsService {
       });
     }
     if(errors.length !== 0) throw errors;
+    const friend = await User.findByPk(friendId);
     const friendship = await FriendShip.findOne(
       {
         where :
@@ -138,7 +143,10 @@ class FriendsService {
           }
       }
     );
-    return friendship;
+    return {
+      friendship: friendship,
+      friend: friend,
+    };
   }
   async getUsers(name) {
     const errors = [];
@@ -150,6 +158,7 @@ class FriendsService {
     }
     if(errors.length !== 0) throw errors;
     const users = await User.findAll({
+      limit: 7,
       where :
         {
           name:
@@ -158,7 +167,16 @@ class FriendsService {
             }
         }
     })
-    return users;
+    const result = users.map((it)=> {
+      return {
+        id: it.id,
+        name: it.name,
+        email: it.email,
+        createdAt: it.createdAt,
+        updatedAt: it.updatedAt,
+      }
+    })
+    return result;
   }
 
   async getFriends(userId) {
@@ -186,9 +204,17 @@ class FriendsService {
     if(errors.length !== 0) throw errors;
     const users = friendships.map(it => User.findByPk(it.friendId));
     const result = await Promise.all(users)
-      .then(responses => responses.map(r => r.toJSON())
-      );
-    return result;
+      .then(responses => responses.map(r => r.toJSON()));
+    const finalRes = result.map(it => {
+      return {
+        id: it.id,
+        name: it.name,
+        email: it.email,
+        createdAt: it.createdAt,
+        updatedAt: it.updatedAt,
+      };
+    });
+    return finalRes;
   }
 }
 
