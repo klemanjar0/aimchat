@@ -21,6 +21,10 @@ module.exports = (sequelize) => {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
+    ownerId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    }
   });
   return Message;
 }

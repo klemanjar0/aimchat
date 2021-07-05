@@ -6,7 +6,6 @@ class UserController {
   async register(req, res) {
     try {
       const data = (await UserService.register(req.body));
-      console.log(data);
       try {
         res.status(200).json(data)
       }

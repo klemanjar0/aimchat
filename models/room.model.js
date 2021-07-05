@@ -13,10 +13,14 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    ownerId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    }
   });
   Room.associate = (models) => {
     Room.belongsToMany(models.User, {
-      through: "user_room",
+      through: models.UserRoom,
       as: "room",
       foreignKey: "roomId",
     });

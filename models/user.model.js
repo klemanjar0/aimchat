@@ -32,14 +32,13 @@ module.exports = (sequelize) => {
     }
   });
   User.associate = (models) => {
-    User.belongsToMany(models.Room, {
-      through: "user_room",
-      as: "user",
-      foreignKey: "userId",
+    User.hasMany(models.FriendShip, {
+      onUpdate: "cascade",
+      onDelete: "cascade"
     });
   };
   User.associate = (models) => {
-    User.hasMany(models.FriendShip, {
+    User.hasMany(models.Message, {
       onUpdate: "cascade",
       onDelete: "cascade"
     });
@@ -48,6 +47,13 @@ module.exports = (sequelize) => {
     User.hasOne(models.UserInfo, {
       onUpdate: "cascade",
       onDelete: "cascade"
+    });
+  };
+  User.associate = (models) => {
+    User.belongsToMany(models.Room, {
+      through: models.UserRoom,
+      as: "user",
+      foreignKey: "userId",
     });
   };
   return User

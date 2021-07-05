@@ -38,6 +38,7 @@ const models = {
   Message: require('./message.model')(sequelize),
   FriendShip: require('./friendship.model')(sequelize),
   UserInfo: require('./user_info.model')(sequelize),
+  UserRoom: require('./user_room.model')(sequelize),
 }
 
 Object.keys(models).forEach((modelName) => {
