@@ -11,6 +11,10 @@ module.exports = (sequelize) => {
     },
     role: {
       type: DataTypes.STRING,
+    },
+    isMuted: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
     }
   });
   return UserRoom;

@@ -30,7 +30,24 @@ class RoomController {
       res.status(422).json(e);
     }
   }
-
+  async deleteRoom(req, res) {
+    try {
+      const data = (await RoomService.deleteRoom(req.user.id, req.query.id));
+      try {
+        res.status(200).json(data)
+      }
+      catch (e) {
+        console.log(e)
+      }
+    }
+    catch(e) {
+      if(e[0].field === 'id'){
+        res.status(403).json(e);
+      }
+      else
+        res.status(422).json(e);
+    }
+  }
 }
 
 module.exports = new RoomController();

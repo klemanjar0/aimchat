@@ -66,7 +66,37 @@ class RoomService {
     }
     if(errors.length !== 0) throw errors;
     const userRooms = await UserRoom.findAll({where: {userId: id}});
-    return userRooms;
+    const rooms = userRooms.map(it => Room.findByPk(it.roomId));
+    const result = await Promise.all(rooms)
+      .then(responses => responses.map(r => r.toJSON()));
+    return result;
+  }
+  async deleteRoom(userId, id){
+    const errors = [];
+    if(!id){
+      errors.push({
+        field: 'id',
+        message: 'Empty id',
+      });
+      throw errors;
+    }
+    const room = await Room.findByPk(id);
+    if(!room){
+      errors.push({
+        field: 'id',
+        message: 'Room not found',
+      });
+      throw errors;
+    }
+    if(room.ownerId !== userId){
+      errors.push({
+        field: 'user',
+        message: 'You are not allowed to delete this room',
+      });
+      throw errors;
+    }
+    await Room.destroy({where: {id: id}})
+    return room;
   }
 }
 
