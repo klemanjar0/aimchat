@@ -47,6 +47,32 @@ class RoomService {
     })
     return room;
   }
+  async addUserToRoom(data){
+    const errors = [];
+    if(!data){
+      errors.push({
+        field: 'userId',
+        message: 'Empty userId',
+      });
+      throw errors;
+    }
+    const { role, userId, roomId } = data;
+    const user = await User.findByPk(userId);
+    if(!user){
+      errors.push({
+        field: 'id',
+        message: 'No user found with declared ID'
+      });
+      throw errors;
+    }
+    if(errors.length !== 0) throw errors;
+    const userRoom = await UserRoom.create({
+      role: role,
+      userId: userId,
+      roomId: roomId,
+    });
+    return userRoom;
+  }
   async getRoomsByOwnerId(id){
     const errors = [];
     if(!id){
